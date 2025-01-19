@@ -1,0 +1,177 @@
+//*****************
+//Program Name: Programming Assignment #1
+//Author: Elise Zur
+//*****************
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	// *COMMENT 1*
+	// Declaring many variables that will be used in the program.
+	// runner 1-3 --> 3 individual runners.
+	// first_place / second_place / third_place --> 1st/2nd/3rd places.
+	// time 1-3 --> 3 runner's finishing times.
+	string runner1, runner2, runner3, first_place, second_place, third_place;
+	double time1, time2, time3;
+
+	cout << "Welcome to the race!\n";
+	cout << "Enter the names of three runners and their finishing times. "
+			"I will tell you who came in first, second, and third.\n";
+
+	// *COMMENT TWO*
+	// Code for Runner 1. Program prompts user to enter runner 1's name and
+	// finishing time. It stores the values inside the variables runner1 & time1.
+	// Input Validation to ensure user does not enter a negative value and
+	// calls cin.fail() if user enters a non-int value. Places user in a while
+	// loop until a valid input is entered.
+	cout << "\nEnter the name of Runner #1 --> ";
+	getline(cin, runner1);
+
+	cout << runner1 << "'s finishing time: ";
+	cin >> time1;
+	while(time1 < 0 or cin.fail())
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "\t> ERROR: re-enter valid input...";
+		cin >> time1;
+	}
+
+	// *COMMENT THREE*
+	// Code for Runner 2. Program prompts user to enter runner 2's name and
+	// finishing time. It stores the values inside the variables runner2 & time2.
+	// Input Validation to ensure user does not enter a negative value and
+	// calls cin.fail() if user enters a non-int value. Places user in a while
+	// loop until a valid input is entered.
+	cout << "\nEnter the name of Runner #2 --> ";
+	cin.ignore();
+	getline(cin, runner2);
+
+	cout << runner2 << "'s finishing time: ";
+	cin >> time2;
+	while(time2 < 0 or cin.fail())
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "\t> ERROR: re-enter valid input...";
+		cin >> time2;
+	}
+
+	// *COMMENT FOUR*
+	// Code for Runner 3. Program prompts user to enter runner 3's name and
+	// finishing time. It stores the values inside the variables runner3 & time3.
+	// Input Validation to ensure user does not enter a negative value and
+	// calls cin.fail() if user enters a non-int value. Places user in a while
+	// loop until a valid input is entered.
+	cout << "\nEnter the name of Runner #3 --> ";
+	cin.ignore();
+	getline(cin, runner3);
+
+	cout << runner3 << "'s finishing time: ";
+	cin >> time3;
+	while(time3 < 0 or cin.fail())
+	{
+		cin.clear();
+		cin.ignore(1000, '\n');
+		cout << "\t> ERROR: re-enter valid input...";
+		cin >> time3;
+	}
+
+	// *COMMENT FIVE*
+	// Input Validation / While loop to ensure no negative values are entered.
+	// If the program finds any finishing time variable is less than 0 (negative)
+	// the program will output a message, and terminate.
+	while (time1 < 0 or time2 < 0 or time3 < 0)
+	{
+		cout << "\nERROR! Please enter positive values for each runner's"
+				" time. Program is ending...";
+		return 1;
+	}
+
+	// *COMMENT SIX*
+	// For loop to go through each runner's value and decide whether they are
+	// assigned first_place, second_place, or third_place.
+	for(int i = 1; i < 4; i++)
+	{
+		// *COMMENT SEVEN*
+		// If statement- If finishing time1 is smaller than both
+		// finishing time2 and time3, then first_place variable is
+		// assigned to the value of runner1.
+		if (time2 > time1 and time3 > time1)
+		{
+			first_place = runner1;
+			// *COMMENT EIGHT*
+			// If/else statement- if time2 is smaller than time3 then
+			// second_place var is assigned to runner2 and third_place
+			// var is assigned to runner3.
+			if (time3 > time2)
+			{
+				second_place = runner2;
+				third_place = runner3;
+			}
+			// *COMMENT NINE*
+			// Else statement catches any trailing statement.
+			// If time3 is smaller than time2 then second_place var
+			// is assigned to runner3 and third_place var is assigned
+			// to runner2.
+			else
+			{
+				second_place = runner3;
+				third_place = runner2;
+			}
+		}
+		// *COMMENT TEN*
+		// If statement- If finishing time2 is smaller than both
+		// finishing time1 and time3, then first_place variable is
+		// assigned to the value of runner2.
+		if (time1 > time2 and time3 > time2)
+		{
+			first_place = runner2;
+			// *COMMENT ELEVEN*
+			// If/else statement- if time1 is smaller than time3 then
+			// second_place var is assigned to runner1 and third_place
+			// var is assigned to runner3.
+			if (time3 > time1)
+			{
+				second_place = runner1;
+				third_place = runner3;
+			}
+			// *COMMENT TWELVE*
+			// Else statement catches any trailing statement.
+			// If time3 is smaller than time1 then second_place var
+			// is assigned to runner1 and third_place var is assigned
+			// to runner3.
+			else
+			{
+				second_place = runner3;
+				third_place = runner1;
+			}
+		}
+
+		if (time1 > time3 and time2 > time3)
+		{
+			first_place = runner3;
+			if (time2 > time1)
+			{
+				second_place = runner1;
+				third_place = runner2;
+			}
+			else
+			{
+				second_place = runner2;
+				third_place = runner1;
+			}
+		}
+	}
+
+	// *COMMENT THIRTEEN*
+	// Console output statements declaring which runner's name is assigned to
+	// first_place/second_place/third_place
+	cout << endl << first_place << " came in 1st place." << endl;
+	cout << second_place << " came in 2nd place." << endl;
+	cout << third_place << " came in 3rd place." << endl;
+
+	return 0;
+}
