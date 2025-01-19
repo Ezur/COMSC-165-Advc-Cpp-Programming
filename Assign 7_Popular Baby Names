@@ -1,0 +1,219 @@
+//============================================================================
+// Name        : PA #7 
+// Author      : Elise Zur
+//============================================================================
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void selectionSort(vector<string> &);
+vector<string>getVector(string);
+string getName(string);
+bool search(string, vector<string>);
+void displayResult(string, string, bool);
+void writeToFile(string, vector<string>);
+void reverseVector(vector<string> &);
+
+int main()
+{
+	string boyName, girlName;
+	bool boyNameFound, girlNameFound;
+	string fileBoyNames = "BoyNames.txt";
+	string fileGirlNames = "GirlNames.txt";
+
+	vector<string> boyNames(getVector("BoyNames.txt"));
+	vector<string> girlNames(getVector("GirlNames.txt"));
+
+	boyName = getName("boy's");
+	girlName = getName("girl's");
+
+	selectionSort(boyNames);
+	selectionSort(girlNames);
+
+	// *COMMENT ONE*
+	// The variables boyNameFound and girlNameFound are
+	// assigned the returned values of the search
+	// functions. These are boolean values and help
+	// to continue the path through the function.
+	// After we receive the boolean value from the
+	// search function, we use that value inside of
+	// displayResult() function.
+	boyNameFound = search(boyName, boyNames);
+	girlNameFound = search(girlName, girlNames);
+
+	// *COMMENT TWO*
+	// As mentioned in comment one, the variables
+	// boyNameFound and girlNameFound is used inside of
+	// the function call here as to pass the boolean
+	// value into the function.
+	displayResult("boy's", boyName, boyNameFound);
+	displayResult("girl's", girlName, girlNameFound);
+
+	writeToFile("Boynames_asc.txt", boyNames);
+	writeToFile("Girlnames_asc.txt", girlNames);
+
+	reverseVector(boyNames);
+	reverseVector(girlNames);
+
+	writeToFile("Boynames_desc.txt", boyNames);
+	writeToFile("Girlnames_desc.txt", girlNames);
+
+	cout<<endl;
+
+	return 0;
+}
+void selectionSort(vector<string> &arr)
+{
+	int startScan, minIndex;
+	string minValue;
+	for (startScan = 0; startScan < (arr.size() - 1); startScan++)
+	{
+		minIndex = startScan;
+		minValue = arr[startScan];
+		for(int index = startScan + 1; index < arr.size(); index++)
+		{
+			if (arr[index] < minValue)
+			{
+				minValue = arr[index];
+				minIndex = index;
+			}
+		}
+		arr[minIndex] = arr[startScan];
+		arr[startScan] = minValue;
+	}
+}
+
+// *COMMENT THREE*
+// The getVector() function reads data from a file that is
+// specified inside the function call. Then, it creates
+// a file input objects which are used here with the vector.
+// We create and store the file values inside of the vector
+// then the vector is returned back to main.
+vector<string> getVector(string file)
+{
+	ifstream fin(file);
+	vector<string> names;
+
+	if(fin)
+	{
+		while (fin >> file)
+			names.push_back(file);
+	}
+	fin.close();
+	return names;
+}
+
+// *COMMENT FOUR*
+// The getName() function prompts the user to enter a name.
+// Inside of the function call above, the program uses the
+// parameter to pass the gender into the function.
+// the variable gender places either "boy's" or "girl's"
+// into the function in order to keep the function as
+// versatile as possible. This is in contrast to hard-coding
+// specific text or values.
+string getName(string gender)
+{
+	string name = " ";
+
+	cout << "Enter a " << gender << " name, or N "
+			"if you\ndo not wish to enter a " << gender
+			<< " 's name: ";
+	cin >> name;
+
+	return name;
+}
+
+// *COMMENT FIVE*
+// The function search() is used to return a boolean value
+// (true or false) depending on if the name the user
+// entered above, is inside the boy/girl vectors.
+bool search(string name, vector<string> names)
+{
+	// *COMMENT SIX*
+	// This for loop runs from 0 until it reaches the
+	// size of the names vector. .size() element is a special
+	// feature used with vectors. Inside the for loop is
+	// an if statement that asks if the user specified
+	// input of variable name is equal to the name at the vector's
+	// index, then return true. This for loop steps through the
+	// entire vector of names to find the one the user entered.
+	for(int i = 0; i < names.size(); i++)
+	{
+		if(name == names[i])
+			return true;
+	}
+	return false;
+}
+
+// *COMMENT SEVEN*
+// The displayResult() function determines whether or not the
+// inputed name is popular or not. The deciding factor comes
+// from the boolean value in the search() function.
+// If the search() function was able to find the name inside
+// the vector, then the variable nameFound will be true, if
+// it was not found, the value will be false.
+void displayResult(string gender, string name, bool nameFound)
+{
+	// *COMMENT EIGHT*
+	// If the user types in N or n into the console to skip
+	// inputing a name, then this if statement will output
+	// that the user decided not to enter a name.
+	// After that output, the control statement will end and
+	// the program will return back to main where it enters
+	// the next control structure.
+	if(name == "N" or name == "n")
+	{
+		cout << "You chose not to enter a " << gender
+			 << " name." << endl;
+		return;
+	}
+
+	if(nameFound)
+		cout << name << " is one of the most popular "
+			 << gender << " names." << endl;
+	else
+		cout << name << " is NOT one of the most popular "
+			 << gender << " names." << endl;
+}
+
+// *COMMENT NINE*
+// The writeToFile() function writes the contents of the
+// vector into the file. The function uses the ofstream
+// file output operation to open the file and create a
+// object.
+void writeToFile(string file, vector<string>names)
+{
+	ofstream fout;
+	fout.open(file);
+
+	if (fout)
+	{
+		for(int i = 0; i < names.size(); i++)
+			fout << names[i] << endl;
+	}
+
+	fout.close();
+}
+
+// *COMMENT TEN*
+// The reverseVector() function reverses the order of the vectors.
+// It uses a temporary variable to hold a value in one, while
+// it swaps the value of the other. The for loop continues from
+// 0 to half the size of the vector. In this function, the vector
+// is passed by reference in order to reverse the vector and then
+// have that change back in main.
+void reverseVector(vector<string> &names)
+{
+	string temp = " ";
+
+	for(int i = 0; i < (names.size()/2); i++)
+	{
+		temp = names[i];
+		names[i] = names[names.size()-i-1];
+		names[names.size()-i-1] = temp;
+	}
+}
