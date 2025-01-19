@@ -1,0 +1,140 @@
+//============================================================================
+// Name        : PA #9 Find the Mode of Test Scores
+// Author      : Elise Zur
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+int getMode(int*, int);
+int* makeArray(int);
+
+int main()
+{
+	// constant for the array size
+	const int SIZE = 8;
+
+	// array of test values
+	int test[SIZE] = {8, 7, 2, 3, 8, 5, 8, 4};
+
+	int mode = 0;
+
+	// use the return value to decide whether or not
+	// a mode is present inside the test set of data.
+	mode = getMode(test, SIZE);
+
+	if (mode == -1)
+		cout << "The test set has no mode.\n";
+	else
+		cout << "\nThe mode of the test set is: "
+		     << mode << endl;
+
+	return 0;
+}
+
+// COMMENT ONE
+// getMode function will receive a pointer to an int array
+// and the size of the array. because it is a dynamic
+// array, we must use a pointer when accessing the array
+// elements.
+int getMode(int *array, int size)
+{
+
+	// frequencies will point at a dynamically allocated array
+	// in this assignment pointer notation (i.e., using the *) should
+	// always be used instead of bracket/subscript notation (i.e., using the []).
+
+	int mode = 0;
+
+	// COMMENT TWO
+	// frequencies is a pointer. it will store the number of times each value
+	// occurs. the first step to work with frequencies, is line 48.
+	// we are setting frequencies to point at the dynamically
+	// allocated array.
+	int *frequencies = makeArray(size);
+
+	// COMMENT THREE
+	// in order to be able to successfully find the mode in the array,
+	// it is necessary to set the first element in frequencies to zero.
+	// this will make it possible to compare and check if there are
+	// multiple of the same numbers.
+	*(frequencies + 0) = 0;
+
+	// COMMENT FOUR
+	// this nested for loop will step through the dynamic array using
+	// frequencies pointer and using pointer notation to call upon
+	// the elements in the array. a nested loop is used here to be
+	// able to use two different indexes.
+	for(int i = 0; i < size; i++)
+	{
+			for(int j = 0; j < size; j++)
+			{
+				// COMMENT FIVE
+				// this inner loop checks if the next value is the same
+				// as the current one. frequencies will increment if
+				// they are the same value. it will not do anything if
+				// the numbers are different.
+				if(*(array + i) == *(array + j))
+					(*(frequencies + i))++;
+			}
+	}
+
+	// COMMENT SIX
+	// the variable named largest will be the value that the current
+	// mode is. largest is set to start at zero because as the loop
+	// traverses through, the if statement will end up changing
+	// the value to the mode's value.
+	int largest = 0;
+
+	// COMMENT SEVEN
+	// the for loop here steps through the size of the test array.
+	// the if statement inside the loop checks if the frequency is
+	// higher than the current value at the largest variable,
+	// then set the mode equal to the number at the array index
+	// where the loop iterator is currently on.
+	for(int i = 0; i < size; i++)
+	{
+		if (*(frequencies + i) > largest)
+		{
+			largest = *(frequencies + i);
+			mode = *(array + i);
+		}
+	}
+
+	// COMMENT EIGHT
+	// this is one of the most important lines of code!!
+	// we MUST delete the dynamic array in order to avoid
+	// any possibility of a memory leak or dangling pointer.
+	// if we forget to do this, we create a huge problem
+	// for the program's memory usage.
+	(delete[] frequencies); // Do NOT remove this -- this needs to be at the end of the function
+	                       // to remove the dynamically allocated frequencies array from memory
+	                       // when it is no longer needed.
+
+	// COMMENT NINE
+	// if the largest value is equal to 1, then we return -1.
+	// we return -1 back to main to signifiy that there is no mode.
+	// inside of main, line 20 states that it will print out
+	// a statement to the console that there is no mode, if
+	// mode is == -1.
+
+	// COMMENT TEN
+	// if the mode is NOT 1, then we return the value
+	// that is set to mode. inside of main, we can utilize this return statement
+	// and do more with this value we found. we choose to output it to the console
+	// that notifies the user what the mode of the test set is.
+	if (largest == 1)
+		return -1;
+	else
+		return mode;
+
+}
+
+
+// dynamically allocates an array of ints and returns a pointer to it.
+// the size parameter is the number of elements to allocate.
+
+int* makeArray(int size)
+{
+	return new int[size];
+}
