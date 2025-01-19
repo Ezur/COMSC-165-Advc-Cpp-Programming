@@ -1,0 +1,230 @@
+//============================================================================
+// Name        : PA 11 Drink Vending Machine
+// Author      : Elise Zur
+//============================================================================
+
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+struct Drink
+{
+	string name;
+	double cost;
+	int inventory;
+};
+
+const int SIZE = 5;
+
+void show_menu(Drink []);
+int get_user_choice();
+double get_moneyz(Drink [], int);
+void calc_change(double &, double, int, double &, Drink []);
+void track_inventory(int, Drink []);
+
+int main()
+{
+	// (1) list of drinks is displayed on screen
+	// (2) user can either quit program or pick a drink
+	// (3) if user picks drink, enter amount of money to be inserted
+	// (4) amount of change is returned and subtract one from number of
+		// drinks left
+	// (5) if drink is sold out & user selects it, message is displayed
+	// (6) when user quits program, display total amount of money machine
+		// earned
+
+	// input validation:
+	// when user enters an amount of money, do not accept
+	// 	negative values or values greater than $1.
+
+	int userChoice = 0;
+	double money, total_earnings = 0, change = 0;
+
+	Drink drinkMachine[SIZE] = { {"Cola", .75, 20},
+								 {"Root Beer", .75, 20},
+								 {"Lemon-Lime", .75, 20} ,
+								 {"Grape Soda", .80, 20} ,
+								 {"Cream Soda", .80, 20 } };
+
+	// COMMENT ONE
+	// the program's loop uses a do-while loop to ensure there will be
+	// at least one loop of the code. inside the do part, the functions
+	// are called to do their own tasks. the functions include,
+	// show_menu, get_user_choice, get_moneyz, and calc_change.
+	do
+	{
+		show_menu(drinkMachine);
+
+		userChoice = get_user_choice();
+
+		if (userChoice == 6)
+			break;
+
+
+		total_earnings += money = get_moneyz(drinkMachine, userChoice);
+
+		calc_change(change, money, userChoice, total_earnings, drinkMachine);
+
+
+	//COMMENT TWO
+	// the while loop that is part of the do-while loop states that
+	// while the user does NOT choose an input of 6, the do loop
+	// will continue running. once the user chooses 6, the program
+	// will output the total earnings that is calculated inside of
+	// the get_moneyz function.
+	} while (userChoice != 6);
+		cout << "Total earnings: $" << total_earnings << endl;
+
+	return 0;
+}
+
+// COMMENT THREE
+// show_menu function will receive the struct object and use it
+// to output the soft drink machine. the for loop uses the index
+// to access the drink names and their prices. at the end of the
+// loop the function outputs the text that shows the option to
+// choose the input 6 in order to leave the machine.
+void show_menu(Drink drinkMachine[])
+{
+	for (int i = 0; i < SIZE; i++)
+		cout << i+1 << ") " << left << setw(20) << drinkMachine[i].name << right << setw(5)
+		<< fixed << setprecision(2) << drinkMachine[i].cost << endl;
+
+	cout << "6) Leave the drink machine" << endl;
+}
+
+// COMMENT FOUR
+// get_user_choice function is to present the user with a prompt
+// to choose which drink they want. at the end of the function,
+// it will return the user's choice back to main to be used
+// further in other functions.
+int get_user_choice()
+{
+	int userChoice = 0;
+
+	// COMMENT FIVE
+	// a do while loop is used to reduce the amount of code
+	// it takes to use input-validation. the while loop
+	// will make sure that userChoice is between the range
+	// of 1-6.
+	do
+	{
+		cout << endl << "Choose one: ";
+		cin >> userChoice;
+
+	} while(userChoice < 1 || userChoice > 6);
+
+	return userChoice;
+}
+
+// COMMENT SIX
+// get_moneyz function will receive two parameters; the struct object,
+// drinkMachine, and the int userChoice. this function will prompt
+// the user to insert the correct amount of money. again, a do while
+// loop is used to utilize the ability to do input validation.
+double get_moneyz(Drink drinkMachine[], int userChoice)
+{
+	double money = 0;
+
+	// COMMENT SEVEN
+	// inside the do loop the function prompts the user to enter
+	// the amount of money. if the money is less than the drink's
+	// cost, or greater than $1, the machine will tell the user
+	// to enter money in the correct range. the range will change
+	// depending on how much the drink costs.
+	do
+	{
+		cout << "Enter an amount of money: ";
+		cin >> money;
+		if (money <  drinkMachine[userChoice - 1].cost || money > 1.00)
+			cout << "Enter at least " << drinkMachine[userChoice - 1].cost
+			<< " and not more than 1 dollar." << endl;
+
+	} while(money < 0.75 || money > 1.00);
+
+	return money;
+}
+
+// COMMENT EIGHT
+// calc_change function receives 5 parameters; the change variable is passed
+// by reference in order to be able to change it's value inside the function.
+// the amount of money the user presented, the user's drink choice, the
+// total earnings, also passed by reference, and the struct object, drinkMachine.
+void calc_change(double &change, double money, int userChoice,
+				 double &total_earnings, Drink drinkMachine[])
+{
+	// COMMENT NINE
+	// (line 159) change is being assigned the value of the amount of money the user
+	// entered MINUS the cost of the drink. further down the function the program
+	// will output the change and when it will be dropped into the change
+	// dispenser.
+	// (line 163) the if statement will check to see if the drink's inventory is
+	// zero, then it will output to the console that the drink is sold out and
+	// then it will return back to the program and restart a new loop.
+
+	change = (money - drinkMachine[userChoice - 1].cost);
+
+	if(drinkMachine[userChoice-1].inventory == 0)
+	{
+		cout << "\nSorry, the drink you chose is sold out.\n\n";
+		return;
+	}
+
+	cout << endl << "Enjoy your beverage!" << endl;
+
+	cout << "\nChange calculated: " << change << endl;
+
+	cout << "Your change, " << fixed << setprecision(2) << change
+		 << " has just dropped into the Change Dispenser." << endl << endl;
+
+	// COMMENT TEN
+	// the total_earnings variable is being subtracted by the value of change.
+	// this is because when the user enters in more money than the drink costs,
+	// they receive change back. the change is NOT profit being made by the
+	// machine because they are giving it back to the user.
+
+	total_earnings -= change;
+
+	// COMMENT ELEVEN
+	// track_inventory function receives the user's drink choice, and the
+	// struct object, drinkMachine to keep track of each drink's inventory
+	// levels. it is called inside of calc_change because if the
+	// drink's inventory is 0, the program should not be outputting
+	// a negative value.
+	track_inventory(userChoice, drinkMachine);
+}
+
+// COMMENT TWELVE
+// track_inventory function uses a switch case to decrement the drink's
+// inventory after each purchase. after the inventory is changed,
+// the function will print to the user how many drinks are left.
+// it has been changed to now print out the name of the drink.
+void track_inventory(int userChoice, Drink drinkMachine[])
+{
+	switch(userChoice)
+	{
+	case 1: // Cola
+		drinkMachine[userChoice - 1].inventory--;
+		break;
+
+	case 2: // Root Beer
+		drinkMachine[userChoice - 1].inventory--;
+		break;
+
+	case 3: // Lemon-Lime
+		drinkMachine[userChoice - 1].inventory--;
+		break;
+
+	case 4: // Grape Soda
+		drinkMachine[userChoice - 1].inventory--;
+		break;
+
+	case 5: // Cream Soda
+		drinkMachine[userChoice - 1].inventory--;
+		break;
+	}
+
+	cout << "There are " << drinkMachine[userChoice - 1].inventory << " cans of "
+		 << drinkMachine[userChoice - 1].name << " left." << endl << endl;
+
+}
