@@ -1,0 +1,228 @@
+//============================================================================
+// Name        : PA #5 Add Rows and Columns
+// Author      : Elise Zur
+//============================================================================
+
+#include <iostream>
+
+using namespace std;
+
+const int COLS = 5;
+
+
+//Function Prototypes
+int getTotal(int array[][COLS], int rows);
+double getAverage(int array[][COLS], int rows);
+int getRowTotal(int array[][COLS], int rowToTotal);
+int getColumnTotal(int array[][COLS], int colToTotal, int rows);
+int getHighestInRow(int array[][COLS], int rowToSearch);
+int getLowestInRow(int array[][COLS], int rowToSearch);
+
+
+int main()
+{
+	const int ROWS = 4;
+
+	// Array with test data
+	int testArray[ROWS][COLS] =
+					{ { 20,  30,  17,  32,  34 },
+					{   24,  26,  29,  27,  21 },
+					{   28,  23,  11,  35,  25 },
+					{   19,  10,  12,  22,  31 } };
+
+
+	cout << "The total of the array elements is "
+		 << getTotal(testArray, ROWS) << endl;
+
+
+	cout << "The average value of an element is "
+		 << getAverage(testArray, ROWS) << endl;
+
+
+	// The second parameter inside the function call
+	// is the specified integer that will set the
+	// array's row index set to that number.
+	cout << "The total of row 0 is "
+		 << getRowTotal(testArray, 0) << endl;
+
+
+	// The second parameter inside the function call
+	// is the specified integer that will set the
+	// array's column index set to that number.
+	cout << "The total of col 2 is "
+		 << getColumnTotal(testArray, 2, ROWS) << endl;
+
+
+	cout << "The highest value in row 2 is "
+		 << getHighestInRow(testArray, 2) << endl;
+
+
+	cout << "The lowest value in row 2 is "
+		 << getLowestInRow(testArray, 2) << endl;
+
+
+	return 0;
+}
+
+// *COMMENT ONE*
+// The function getTotal receives two parameters.
+// It receives an array and the number of rows.
+// Due to array's being automatically passed by reference,
+// there is no need to put an ampersand in front of the name,
+// because it is automatic. We pass the rows to the function
+// so that we can utilize the value inside of the function.
+// The function will return an integer back into the main program.
+int getTotal(int array[][COLS], int rows)
+{
+	int sum= 0;
+
+	// *COMMENT TWO*
+	// This is a nested for loop in order to read the values
+	// of each row and column. The outer for loop starts at the
+	// first row, and steps into the inner for loop and reads
+	// the individual elements, which is the number of columns.
+	// For each element, we have an on-going counter variable,
+	// named sum to continue adding each value to it, thus
+	// resulting in a summation of the array values.
+	for(int r = 0; r < rows; r++)
+		for(int c = 0; c < COLS; c++)
+			sum += array[r][c];
+
+	return sum;
+}
+
+// *COMMENT THREE*
+// getAverage function will find the average value of
+// all elements based on how many elements there are
+// in the array. This piece is not hard-coded, to allow
+// the user to change the array, or use a entirely
+// different array and still be able to correctly
+// find the average value.
+// The function will return a double in order to
+// present a decimal value, which is more accurate
+// compared to a single integer value.
+double getAverage(int array[][COLS], int rows)
+{
+	double average = 0, sum = 0;
+
+	// *COMMENT FOUR*
+	// This is a nested for loop in order to read the values
+	// of each row and column. The outer for loop starts at the
+	// first row, and steps into the inner for loop and reads
+	// the individual elements, which is the number of columns.
+	// For each element, we have an on-going counter variable,
+	// named sum to continue adding each value to it.
+	// In order to find the average of all values in the array,
+	// I set average equal to the sum variable divided by the
+	// total number of elements (rows*cols).
+	for(int r = 0; r < rows; r++)
+		for(int c = 0; c < COLS; c++)
+			sum += array[r][c];
+
+	return average = (sum / (rows * COLS));
+}
+
+// *COMMENT FIVE*
+// getRowTotal function receives an array and an integer that
+// is specified in main. This integer will keep the index set
+// at the specific location chosen. For example, the user
+// sends 3 into the rowToTotal variable, and inside the for
+// loop array[rowToTotal][c] will equal array[3][c]
+// throughout the function.
+int getRowTotal(int array[][COLS], int rowToTotal)
+{
+	int sum = 0;
+
+	for (int c = 0; c < COLS; c++)
+		sum += array[rowToTotal][c];
+
+	return sum;
+}
+
+// *COMMENT SIX*
+// getColumnTotal function receives three parameters; an array,
+// a user specified integer, and the variable set to the number
+// of rows. The user specified integer will keep the index set
+// at a certain location during the entire function.
+// For example, if the parameter is 2, array[r][colToTotal]
+// will be equal to array[r][2]. This allows us to step through
+// each value and get the value of the column total.
+int getColumnTotal(int array[][COLS], int colToTotal, int rows)
+{
+	int sum = 0;
+
+	for (int r = 0; r < rows; r++)
+		sum += array[r][colToTotal];
+
+	return sum;
+}
+
+// *COMMENT SEVEN*
+// getHighestInRow function receives two parameters;
+// one array and one set integer that will go
+// unchanged throughout the program. It allows us to
+// set the variable, rowToSearch, to an integer,
+// in order to specifically only search through that
+// row. The purpose of the function is to search through
+// a certain row, and decide which number has the
+// highest value.
+int getHighestInRow(int array[][COLS], int rowToSearch)
+{
+	// *COMMENT EIGHT*
+	// the integer variable highest is set to the first
+	// element in the array. This will allow us to compare
+	// and contrast whether or not there are values
+	// smaller or larger than it.
+	int highest = array[rowToSearch][0];
+
+	// *COMMENT NINE*
+	// This for loop is set to go through an entire row
+	// and return the highest value found.
+	// rowToSearch will remain the same value
+	// while the column index will go from 0 through the
+	// the number of columns.
+	for (int c = 0; c < COLS; c++)
+	{
+		// *COMMENT TEN*
+		// the if statement asks, if the value that is
+		// currently highest, is less than the value
+		// at the index, then that value is
+		// given the label of highest.
+		if (highest < array[rowToSearch][c])
+			highest = array[rowToSearch][c];
+	}
+	return highest;
+}
+
+// *COMMENT ELEVEN*
+// getLowestInRow function receives two parameters;
+// one array and one set integer that will go
+// unchanged throughout the program. It allows us to
+// set the variable, rowToSearch, to an integer,
+// in order to specifically only search through that
+// row. The purpose of the function is to search through
+// a certain row, and decide which number has the
+// lowest value.
+int getLowestInRow(int array[][COLS], int rowToSearch)
+{
+	int lowest = array[rowToSearch][0];
+
+	// *COMMENT TWELVE*
+	// This for loop is set to go through an entire row
+	// and return the lowest value found.
+	// rowToSearch will remain the same value
+	// while the column index will go from 0 through the
+	// the number of columns.
+	for (int c = 0; c < COLS; c++)
+	{
+		// *COMMENT THIRTEEN*
+		// the if statement asks, if the value that is
+		// currently lowest, is greater than the value
+		// at the index, then that value is
+		// given the label of lowest.
+		if (lowest > array[rowToSearch][c])
+			lowest = array[rowToSearch][c];
+	}
+	return lowest;
+}
+
