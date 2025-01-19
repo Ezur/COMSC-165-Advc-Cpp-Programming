@@ -1,0 +1,168 @@
+//====================================================================
+// Name        : PA #3 The Competition 
+// Author      : Elise Zur
+//====================================================================
+
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+void getJudgeData(double &);
+void calcScore(double, double, double, double, double);
+double findLowest(double, double, double, double, double);
+double findHighest(double, double, double, double, double);
+
+const int MIN = 0.0, MAX = 10.0;
+
+int main()
+{
+	// *COMMENT ONE*
+	// The 5 score variables each relate to an individual
+	// judge's score. We declare them as doubles, to allow
+	// the user to later on input scores that include
+	// decimals and to be able to calculate an average score.
+	double score1, score2, score3, score4, score5;
+
+	cout << "Welcome to the competition!\n\n";
+	cout << "Please enter a value that is between 0.0 and 10.0" << endl;
+	cout << "-------------------------------------------------" << endl;
+
+	// *COMMENT TWO*
+	// Each function call to getJudgeData() is to have the
+	// program restate the prompt and ask the user for their
+	// input.
+	getJudgeData(score1);
+	getJudgeData(score2);
+	getJudgeData(score3);
+	getJudgeData(score4);
+	getJudgeData(score5);
+
+	// *COMMENT THREE*
+	// calcScore() function receives five parameters,
+	// each one being a judge's score. This allows
+	// the program to calculate the total and average
+	// score the student received.
+	calcScore(score1, score2, score3, score4, score5);
+
+
+return 0;
+
+}
+
+// *COMMENT FOUR*
+// getJudgeData() function receives a double variable
+// named score that acts as a placeholder for each value that
+// will be sent over in the main function. It is being passed
+// by reference in order to allow the user to change the
+// variable's value inside the function and have it be a change
+// that last throughout the function. This function does not return
+// any value as it is a void function.
+void getJudgeData(double &score)
+{
+	cout << "Enter a judge's score: ";
+	cin >> score;
+
+	// *COMMENT FIVE*
+	// A while loop is used here for input validation.
+	// The code reads, while the score is less than the minimum
+	// or the score is greater than the maximum, which are both
+	// hard-coded constants, then the while loop will return true
+	// and continue to ask the user to re-enter the values
+	// until the while loop returns false, and stops running.
+	while(score < MIN or score > MAX)
+	{
+		cout << "The score must be between 0.0 and 10.0" << endl;
+		cout << "Enter a judge's score: ";
+		cin >> score;
+	}
+}
+
+// *COMMENT SIX*
+// The function calcScore() receives 5 scores. In this function, the
+// parameters are the same name as the variables in main just out
+// of ease for the programmer. The variables are being passed by value
+// because they are not changing any value. They are only given
+// "read" permissions.
+void calcScore(double score1, double score2, double score3,
+			   double score4, double score5)
+{
+	// *COMMENT SEVEN*
+	// The variables here are defined locally inside the function
+	// and will be destroyed once the function ends.
+	// I defined new variables locally inside this function
+	// because they did not need to be used in main. This
+	// helps the program save on memory.
+	double min, max, sum = 0;
+
+	// *COMMENT EIGHT*
+	// The variable sum is used here to add together each value
+	// the user enters in. This set of code could have been placed
+	// inside of another function, but because this function
+	// is based around the idea of calculating the score,
+	// I decided to write it here for the sake of keeping things organized
+	// and to decrease the amount of variables that needed to be passed
+	// through to different functions.
+	sum += score1;
+	sum += score2;
+	sum += score3;
+	sum += score4;
+	sum += score5;
+
+	// *COMMENT NINE*
+	// The variables min and max are being assigned to the outputs of
+	// the functions findLowest() and findHighest(). This enables
+	// the program to use this value further inside of the function
+	// rather than complicating the code.
+	min = findLowest(score1, score2, score3, score4, score5);
+	max = findHighest(score1, score2, score3, score4, score5);
+
+	// *COMMENT TEN*
+	// This line of code represents the action of removing the lowest
+	// and highest score the student received. By using the variables
+	// that were assigned the values from the functions, this provides
+	// more code efficiency.
+	sum = sum - min - max;
+
+	// Inside of the console output statement is where the program outputs
+	// the average score. The sum is divided by 3 because there will always
+	// only be 3 scores left after the maximum and minimum scores are dropped.
+	cout << "After dropping the lowest & highest scores, the average score"
+			" was " << fixed << setprecision(1) << sum / 3 << endl;
+
+}
+// *COMMENT ELEVEN*
+// The program findLowest() and findHighest() both complete similar behaviors.
+// The code completes comparisons among variables and decides if
+// the value is less than the minimum, then that score is replaced as the
+// minimum. Or, in the other function, if the value is greater than the
+// maximum, then that score is replaced as the maximum.
+double findLowest(double score1, double score2, double score3,
+				  double score4, double score5)
+{
+	double min = MAX;
+
+	if (score1 < min) min = score1;
+	if (score2 < min) min = score2;
+	if (score3 < min) min = score3;
+	if (score4 < min) min = score4;
+	if (score5 < min) min = score5;
+
+	return min;
+}
+
+
+double findHighest(double score1, double score2, double score3,
+				   double score4, double score5)
+{
+	double max = MIN;
+
+	if (score1 > max) max = score1;
+	if (score2 > max) max = score2;
+	if (score3 > max) max = score3;
+	if (score4 > max) max = score4;
+	if (score5 > max) max = score5;
+
+	return max;
+
+}
