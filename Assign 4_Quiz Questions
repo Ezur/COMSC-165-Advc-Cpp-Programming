@@ -1,0 +1,130 @@
+//============================================================================
+// Name        : PA #4 Quiz Questions
+// Author      : Elise Zur
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+const int SIZE = 20;
+
+void output_stats(int arr[], int correct, int wrong);
+
+int main()
+{
+	int correct = 0, wrong = 0, index = 0;
+	char answer_key[SIZE] = { 'A', 'D', 'B', 'B', 'C',
+							  'B', 'A', 'B', 'C', 'D',
+							  'A', 'C', 'D', 'B', 'D',
+							  'C', 'C', 'A', 'D', 'B' };
+
+	char user_input[SIZE] = { };
+	int wrong_index[SIZE] = { };
+
+	cout << "Please enter the student's answers for each of the questions." << endl;
+	cout << "Press ENTER after typing each answer." << endl;
+	cout << "Please enter ONLY an A, B, C, or D for each question." << endl;
+
+	// *COMMENT ONE*
+	// This for loop is here to run through the number of quiz questions (1-20)
+	// where, in each loop, the user is prompted for an answer.
+	// This also encapsulates multiple conditional statements and a while loop.
+	for (int i = 0; i < SIZE; i++)
+	{
+		cout << "Question " << i+1 << ": ";
+		cin >> user_input[i];
+
+		// *COMMENT TWO*
+		// This while loop has a condition that says if the user input is not
+		// A, B, C, or D, then it enters into a loop. It will ask the user
+		// for their input until that while loop condition
+		// is false again, and a valid input is chosen.
+		while(user_input[i] != 'A' and user_input[i] != 'B' and
+			  user_input[i] != 'C' and user_input[i] != 'D')
+		{
+			cout << "Answer only using an A, B, C, or D! Try again >> ";
+			cin >> user_input[i];
+		}
+
+		// *COMMENT THREE*
+		// This if statement inquires, if at that index, the user_input
+		// is equal to the answer key, then increment a counter variable
+		// that keeps track of the number of correct answers.
+		if (user_input[i] == answer_key[i])
+			correct++;
+		else
+		{
+			// *COMMENT FOUR*
+			// This else statement code runs when the value of the
+			// user_input is not the same as the answer key's value.
+			// The variable wrong is incremented to keep track of
+			// how many times this code is run, which therefore keeps
+			// track of how many wrong answers were entered.
+			wrong++;
+
+			// *COMMENT FIVE*
+			// Line 69 takes the index of the value that was wrong,
+			// and adds it to the array named wrong_index[].
+			wrong_index[index] = i+1;
+
+			// *COMMENT SIX*
+			// The variable index is incremented by one because
+			// that allows the array to keep a list of which
+			// index's (the question number) was wrong.
+			index++;
+		}
+	}
+
+	// *COMMENT SEVEN*
+	// This function output_stats() receives four parameters.
+	// (1) wrong_index[] array which holds the index of the number
+	// that was marked incorrect.
+	// (2) correct is a counter variable that holds the value of
+	// all the answers marked correct.
+
+	// *COMMENT EIGHT*
+	// (3) wrong is a counter variable that holds the value of
+	// the number of wrong answers.
+	// (4) index is a counter variable that is keeping track of
+	// a separate counter in order to properly count the
+	// number of variables inside the wrong_index array.
+	output_stats(wrong_index, correct, wrong);
+
+	return 0;
+}
+
+// *COMMENT NINE*
+// output_stats function receives three parameters. It's purpose
+// is to output to the console the final results of how the
+// student did on their exam. The function will display if
+// they passed or failed, the number of correct answers, the
+// number of incorrect answers, and the question numbers
+// that were incorrect.
+void output_stats(int arr[], int correct, int wrong)
+{
+	// *COMMENT TEN*
+	// the variable correct is used to decide if the student
+	// passed or failed the exam. If the student received 15
+	// correct answers, then they passed. If not, they failed
+	// the exam.
+	if (correct >= 15)
+		cout << "\nThe student passed the exam." << endl;
+	else
+		cout << "\nThe student failed the exam." << endl;
+
+	cout << "Correct Answers: " << correct << endl;
+	cout << "Incorrect Answers: " << wrong << endl;
+	cout << "\nQuestions that were answered incorrectly: " << endl;
+
+	// *COMMENT ELEVEN*
+	// This for loop is used to loop from 0 to the number of wrong
+	// answers on the exam. the variable wrong is used inside of
+	// the for loop to only output a specific number according to
+	// earlier in the function. If we used SIZE again, then
+	// the function would output 0s in place of the correct answers,
+	// while still outputting the questions that were incorrect.
+	// This allows the function to only output the incorrect ones.
+	for (int i = 0; i < wrong; i++)
+		cout << arr[i] << endl;
+
+}
